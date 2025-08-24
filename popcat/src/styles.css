@@ -1,0 +1,22 @@
+html, body { height: 100%; }
+
+/* ป้องกันลากเลือกตัวอักษร */
+.noselect { 
+  -webkit-user-select: none; 
+  -ms-user-select: none; 
+  user-select: none; 
+}
+
+/* เอฟเฟกต์ยุบ/เด้งตอนกด */
+.click-anim { 
+  transform: translateY(0); 
+  transition: transform 60ms ease; 
+}
+.click-anim.pop { 
+  transform: translateY(3px); 
+}
+
+/* แผงล่างแบบ bottom sheet */
+.sheet { 
+  transition: transform 220ms ease, box-shadow 220ms ease; 
+}
