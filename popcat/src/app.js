@@ -18,7 +18,6 @@ const countrySel = document.getElementById('country');
 const leaderboardBody = document.getElementById('leaderboard');
 const totalEl = document.getElementById('totalClicks');
 const resetBtn = document.getElementById('resetBtn');
-const popSound = document.getElementById('popSound');
 const bottomSheet = document.getElementById('bottomSheet');
 const toggleSheet = document.getElementById('toggleSheet');
 const toggleIcon = document.getElementById('toggleIcon');
@@ -70,25 +69,68 @@ function updateTotal() {
   totalEl.textContent = state.total.toLocaleString();
 }
 
+// ------- mouth helpers -------
+function openMouth() {
+  catClosed.classList.add('opacity-0', 'pop');
+  catOpen.classList.remove('opacity-0');
+}
+function closeMouth() {
+  catClosed.classList.remove('opacity-0', 'pop');
+  catOpen.classList.add('opacity-0');
+}
+
+// ------- Web Audio (low-latency) -------
+const POP_URL = "https://cdn.jsdelivr.net/gh/Attaporn0Grab/pop_cat@main/soud/poppop.ai%20-%20quick%20pop%20sound%20effect.mp3";
+let audioCtx, popBuffer = null, waInit = false;
+
+async function initWebAudio() {
+  if (waInit) return;
+  waInit = true;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const res = await fetch(POP_URL, { mode: "cors" });
+  const arr = await res.arrayBuffer();
+  popBuffer = await audioCtx.decodeAudioData(arr);
+}
+
+function playPopWA() {
+  if (!audioCtx || !popBuffer) return;
+  const src = audioCtx.createBufferSource();
+  src.buffer = popBuffer;
+  // random pitch เล็กน้อย ให้ไม่จำเจ
+  src.playbackRate.value = 1 + (Math.random() * 0.08 - 0.04);
+  const gain = audioCtx.createGain();
+  gain.gain.value = 0.9;
+  src.connect(gain).connect(audioCtx.destination);
+  src.start();
+}
+
+// ปลดล็อคเสียงบนมือถือ/บราวเซอร์: เริ่มโหลด+resume เมื่อมี gesture ครั้งแรก
+let audioUnlocked = false;
+stage.addEventListener('pointerdown', async () => {
+  if (!audioUnlocked) {
+    try {
+      await initWebAudio();
+      if (audioCtx.state !== 'running') await audioCtx.resume();
+    } catch {}
+    audioUnlocked = true;
+  }
+}, { once: true });
+
+// ------- click logic (hold to keep mouth open) -------
 function clickOnce() {
   const { code, name, flag } = getSelectedInfo();
   ensureCountryInState(code, name, flag);
   state.counts[code].count += 1;
   saveCounts(); updateTotal(); renderLeaderboard();
 
-  // visual toggle + sound
-  catClosed.classList.add('opacity-0', 'pop');
-  catOpen.classList.remove('opacity-0');
-  popSound.currentTime = 0;
-  popSound.play().catch(()=>{});
-  setTimeout(() => {
-    catClosed.classList.remove('opacity-0', 'pop');
-    catOpen.classList.add('opacity-0');
-  }, 90);
+  openMouth();
+  playPopWA(); // เสียงแบบหน่วงต่ำ
 }
 
-// click anywhere on stage to pop
+// click/hold anywhere on stage to pop
 stage.addEventListener('pointerdown', clickOnce);
+stage.addEventListener('pointerup', closeMouth);
+stage.addEventListener('pointerleave', closeMouth);
 
 // reset
 resetBtn.addEventListener('click', () => {
