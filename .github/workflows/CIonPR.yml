@@ -1,0 +1,13 @@
+name : CI on PR
+
+on:
+  pull_request:
+    branches: [ main ]
+
+    
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Smoke OK ✅"
