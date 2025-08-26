@@ -1,0 +1,27 @@
+name: CI on PR          # ชื่อ workflow แสดงใน GitHub Actions tab
+
+on:
+  pull_request:         # ให้รัน workflow นี้ทุกครั้งที่มี Pull Request
+    branches: [ main ]  # ที่จะ merge เข้า branch main
+
+jobs:
+  test:                 # ตั้งชื่อ job ว่า test
+    runs-on: ubuntu-latest   # ใช้ runner ของ GitHub ที่เป็น Ubuntu ล่าสุด
+    timeout-minutes: 10      # จำกัดเวลาทำงาน 10 นาที กันค้าง
+
+    steps:              # ขั้นตอนต่าง ๆ ที่ job จะทำ
+      - uses: actions/checkout@v4
+        # ดึงโค้ดจาก repo (ที่อยู่ใน PR) มาไว้ใน runner
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20   # เลือกเวอร์ชัน Node.js ที่จะใช้
+          cache: npm         # เปิด cache สำหรับ npm เพื่อให้ install เร็วขึ้น
+
+      - run: npm ci --if-present
+        # ติดตั้ง dependencies ตาม package-lock.json
+        # (--if-present = ถ้าไม่มี package.json ก็ไม่ error)
+
+      - run: npm test --if-present
+        # รันคำสั่งทดสอบ (npm test)
+        # (--if-present = ถ้าไม่มีสคริปต์ test ใน package.json ก็ข้าม)
