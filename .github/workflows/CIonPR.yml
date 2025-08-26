@@ -1,0 +1,17 @@
+name: CI on PR                     # ชื่อ workflow
+
+on:
+  pull_request:
+    branches: [ main ]             # รันเมื่อมี PR จะ merge เข้า main
+
+jobs:
+  test:                            # job ชื่อ test
+    runs-on: ubuntu-latest         # ใช้เครื่อง Ubuntu ของ GitHub
+    steps:
+      - uses: actions/checkout@v4  # โหลดซอร์สโค้ดของ PR ลงเครื่อง
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20         # ติดตั้ง Node 20
+          cache: npm               # เปิด cache ให้ npm (เร็วขึ้น)
+      - run: npm ci                # ติดตั้งแพ็กเกจจาก package-lock.json
+      - run: npm test              # รันทดสอบด้วย Jest
