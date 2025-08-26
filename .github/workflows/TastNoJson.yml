@@ -1,0 +1,12 @@
+name: test ver no json          # ชื่อ workflow แสดงใน GitHub Actions tab
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "No npm project yet - smoke check passed"
