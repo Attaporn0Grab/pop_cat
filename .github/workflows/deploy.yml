@@ -1,0 +1,34 @@
+name: Deploy Popcat to GitHub Pages (release)
+
+on:
+  push:
+    branches: [ release ]   # ดีพลอยเฉพาะเมื่อมีการ push/merge เข้ากิ่ง release
+  workflow_dispatch:         # เผื่ออยากกดรันเอง
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production          # ไปตั้ง Required reviewers ได้ที่ Settings → Environments
+      # url จะถูกเติมอัตโนมัติโดย action
+    steps:
+      - uses: actions/checkout@v4
+
+      # กรณีเว็บ static ไม่ต้อง build → อัปโหลดโฟลเดอร์ src ตรง ๆ
+      - name: Upload artifact (src)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: src             # ถ้าอนาคตมีขั้นตอน build ให้เปลี่ยนเป็น dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
