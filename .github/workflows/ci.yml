@@ -1,0 +1,31 @@
+name: CI to frontend
+
+on:
+  push:
+    branches: [ master ]      # รันเวลา push เข้า master
+  pull_request:
+    branches: [ main ]        # รันเวลา PR เข้า main
+  workflow_dispatch:
+
+jobs:
+  frontend-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test -- --ci --watchAll=false
