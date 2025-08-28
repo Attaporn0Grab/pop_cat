@@ -6,6 +6,7 @@
 */
 import pkg from 'pg'
 const { Pool } = pkg
+export { getTotal, getLeaderboard, addPops } from './db.dynamo.js'
 
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
