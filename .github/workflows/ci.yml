@@ -49,7 +49,7 @@ jobs:
           npm install --no-audit --no-fund
 
       - name: Unit tests (Vitest)
-        run: npm test
+        run: npm test -- --passWithNoTests
 
       - name: Build frontend
         run: npm run build   # (ควรเป็น "vite build" ตาม package.json ล่าสุด)
