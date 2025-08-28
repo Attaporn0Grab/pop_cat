@@ -17,5 +17,5 @@ npm run dev
 
 ## Notes
 - Endpoint: `/api/pop`, `/api/total`, `/api/leaderboard`
-- ปรับ ENV ใน `backend/.env.example` แล้วค่อยตั้งค่าใน compose หรือระบบจริง.
+- ปรับ ENV ใน `backend/.env.example` แล้วค่อยตั้งค่าใน compose หรือระบบจริง
 - โค้ดนี้เลี่ยงการใช้ asset ต้นฉบับของ popcat
