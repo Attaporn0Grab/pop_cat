@@ -1,0 +1,30 @@
+# Ignore node artifacts and build outputs
+node_modules/
+**/node_modules/
+dist/
+build/
+coverage/
+
+# Env & local configs
+.env
+.env.local
+.env.*.local
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Vite/Cache
+.vite
+.cache
+
+# TypeScript
+*.tsbuildinfo
+
+# Docker
+docker-data/
