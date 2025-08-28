@@ -1,3 +1,9 @@
+/* Thai:
+เลเยอร์ฐานข้อมูล Postgres:
+- ใช้ pg.Pool เพื่อ connection pooling
+- ฟังก์ชัน getTotal, getLeaderboard, addPops แยกชัดเจน
+- ระวังว่า query ควรใช้พารามิเตอร์เพื่อความปลอดภัย (ได้ทำไว้แล้ว)
+*/
 import pkg from 'pg'
 const { Pool } = pkg
 

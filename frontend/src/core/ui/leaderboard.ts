@@ -1,3 +1,8 @@
+/* Thai:
+ชุด reducer สั้นๆ สำหรับ state ของแผง Leaderboard:
+- initialState, open, close, toggle
+- เขียนให้ฟังก์ชันเป็น pure และอ่านง่าย เหมาะกับการเทสและ reuse
+*/
 export type LBState = { open: boolean }
 
 export function initialState(): LBState {

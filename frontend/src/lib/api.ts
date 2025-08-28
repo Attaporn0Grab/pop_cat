@@ -1,9 +1,19 @@
+/* Thai:
+ฟังก์ชันเรียก API ฝั่ง Backend:
+- getLeaderboard, getGlobalTotal, postPop
+- ปรับให้รองรับทั้งรูปแบบผลลัพธ์ที่เป็น array ตรงๆ หรือ {items: [...]}
+- ครอบ res.ok เพื่อคืนค่าเริ่มต้นที่ปลอดภัยเมื่อเกิดข้อผิดพลาด
+*/
 export type Leader = { country: string; total: number }
 
 export async function getLeaderboard(): Promise<Leader[]> {
   const res = await fetch('/api/leaderboard')
   if (!res.ok) return []
-  return res.json()
+  const data = await res.json()
+  // รองรับทั้งสองรูปแบบ: [{...}] หรือ { items: [{...}] }
+  if (Array.isArray(data)) return data as Leader[]
+  if (data && Array.isArray((data as any).items)) return (data as any).items as Leader[]
+  return []
 }
 
 export async function getGlobalTotal(): Promise<number> {

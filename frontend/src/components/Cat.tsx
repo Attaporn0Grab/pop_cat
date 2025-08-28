@@ -1,3 +1,9 @@
+/* Thai:
+คอมโพเนนต์รูปแมว:
+- รับ prop 'open' เพื่อตัดสินใจใช้รูปปากเปิดหรือปิด
+- ใช้ <img draggable={false}> เพื่อกันลากภาพ
+- popClass เอาไว้เติมเอฟเฟกต์ระหว่าง burst
+*/
 import React from 'react'
 
 type Props = { open: boolean; popClass?: string }

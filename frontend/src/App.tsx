@@ -1,3 +1,10 @@
+/* Thai:
+คอมโพเนนต์หลักของแอป Popcat โคลน:
+- จัดการ state การเปิด/ปิดปากแมว การ burst ระหว่างคลิก และแผง Leaderboard
+- ดึงข้อมูลยอดรวม (global total) และตารางผู้นำ
+- บริหาร event pointer เพื่อกัน double-trigger และกันการนับคลิกบน element ที่ไม่ต้องการ (data-nopop)
+หมายเหตุ: โค้ดพยายามให้เรียบง่าย อ่านง่าย และแยก concerns ให้ชัดเจน
+*/
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Cat from './components/Cat'
 import Leaderboard from './components/Leaderboard'

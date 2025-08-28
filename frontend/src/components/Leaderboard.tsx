@@ -1,3 +1,9 @@
+/* Thai:
+คอมโพเนนต์ Leaderboard:
+- แสดงรายชื่อประเทศและยอดรวม
+- มี logic เล็กน้อยสำหรับแสดงการ 'เลื่อนอันดับ' เพื่อ feedback ผู้ใช้
+- โค้ดระวัง index เปลี่ยนและใช้ useRef เก็บค่า index เดิม เพื่อเทียบการเปลี่ยนแปลง
+*/
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import type { Leader } from '../lib/api'
 

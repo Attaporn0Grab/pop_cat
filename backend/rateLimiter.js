@@ -1,3 +1,8 @@
+/* Thai:
+ตัวจำกัดความถี่แบบ in-memory ต่อ IP (sliding window):
+- เพียงพอสำหรับ dev/demo หรือโหลดเบาๆ
+- โปรดใช้ Redis/Upstash หรือ rate limit ระดับ reverse-proxy ในโปรดักชัน
+*/
 // in-memory per-IP sliding window. พอสำหรับ demo เท่านั้น
 const buckets = new Map()
 

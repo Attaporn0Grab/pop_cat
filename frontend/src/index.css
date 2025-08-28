@@ -1,3 +1,8 @@
+/* Thai:
+สไตล์หลักของ UI แบบเบาๆ:
+- จัดวาง layout, ขนาด, และ animation เล็กน้อย
+- เน้นให้อ่านง่าย และบำรุงรักษาง่าย ไม่ยัด utility เกินจำเป็น
+*/
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
