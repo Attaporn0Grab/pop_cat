@@ -1,30 +1,24 @@
-/* Thai:
-ฟังก์ชันเรียก API ฝั่ง Backend:
-- getLeaderboard, getGlobalTotal, postPop
-- ปรับให้รองรับทั้งรูปแบบผลลัพธ์ที่เป็น array ตรงๆ หรือ {items: [...]}
-- ครอบ res.ok เพื่อคืนค่าเริ่มต้นที่ปลอดภัยเมื่อเกิดข้อผิดพลาด
-*/
+// frontend/src/lib/api.ts
+import { API_BASE } from '../api'
+
 export type Leader = { country: string; total: number }
 
-export async function getLeaderboard(): Promise<Leader[]> {
-  const res = await fetch('/api/leaderboard')
+export async function getLeaderboard(limit = 50): Promise<Leader[]> {
+  const res = await fetch(`${API_BASE}/api/leaderboard?limit=${limit}`)
   if (!res.ok) return []
   const data = await res.json()
-  // รองรับทั้งสองรูปแบบ: [{...}] หรือ { items: [{...}] }
-  if (Array.isArray(data)) return data as Leader[]
-  if (data && Array.isArray((data as any).items)) return (data as any).items as Leader[]
-  return []
+  return Array.isArray(data) ? (data as Leader[]) : (data?.items ?? [])
 }
 
 export async function getGlobalTotal(): Promise<number> {
-  const res = await fetch('/api/total')
+  const res = await fetch(`${API_BASE}/api/total`)
   if (!res.ok) return 0
   const { total } = await res.json()
   return Number(total || 0)
 }
 
 export async function postPop(country: string, n: number): Promise<{ total: number; countryTotal: number } | null> {
-  const res = await fetch('/api/pop', {
+  const res = await fetch(`${API_BASE}/api/click`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ country, n })
