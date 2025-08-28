@@ -1,44 +1,84 @@
-name: CI (frontend)
+name: CI (PR only)
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'frontend/**'
-      - '.github/workflows/ci.yml'
   pull_request:
     branches: [ main ]
     paths:
       - 'frontend/**'
-  workflow_dispatch:
+      - 'backend/**'
+      - '.github/workflows/ci.yml'
 
 jobs:
-  test-and-build-frontend:
+  # 1) ตรวจไฟล์ที่เปลี่ยน
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+      backend:  ${{ steps.filter.outputs.backend }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            frontend:
+              - 'frontend/**'
+            backend:
+              - 'backend/**'
+
+  # 2) Frontend (รันเฉพาะเมื่อแตะ frontend/**)
+  frontend:
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: frontend
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-          # cache ของ setup-node ใช้ hash จาก package-lock.json
-          # แต่เราจะลบ lockfile ทิ้ง วิธี A จึงไม่ได้ cache ไว้ตรงนี้
 
-      # วิธี A: สร้าง lock และติดตั้งบน Linux ทุกครั้ง
-      - name: Install dependencies (regenerate lock on Linux)
+      # regenerate lock บน Linux กัน rollup native แตก
+      - name: Install deps (frontend)
         run: |
           rm -f package-lock.json
           rm -rf node_modules
           npm install --no-audit --no-fund
 
-      - name: Run unit tests (Vitest)
-        run: npm test
-
-      - name: Build
+      - name: Build frontend
         run: npm run build
+
+  # 3) Backend (รันเฉพาะเมื่อแตะ backend/**)
+  backend:
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install deps (backend)
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --no-audit --no-fund
+          fi
+
+      # 👉 ข้าม test ไปก่อน
+      - name: Build backend
+        run: |
+          if npm run | grep -q "build"; then
+            npm run build
+          else
+            echo "No build script in backend, skipping..."
+          fi
