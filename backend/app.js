@@ -10,7 +10,7 @@ import helmet from 'helmet'
 import cors from 'cors'
 import morgan from 'morgan'
 import { z } from 'zod'
-import { addPops, getLeaderboard, getTotal } from './db.js'
+import { addPops, getLeaderboard, getTotal } from './db.dynamo.js'
 import { canConsume } from './rateLimiter.js'
 
 export function createApp() {

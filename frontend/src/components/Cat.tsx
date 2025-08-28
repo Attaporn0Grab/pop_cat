@@ -1,18 +1,19 @@
-/* Thai:
-คอมโพเนนต์รูปแมว:
-- รับ prop 'open' เพื่อตัดสินใจใช้รูปปากเปิดหรือปิด
-- ใช้ <img draggable={false}> เพื่อกันลากภาพ
-- popClass เอาไว้เติมเอฟเฟกต์ระหว่าง burst
-*/
-import React from 'react'
+import React, { useState } from 'react'
 
 type Props = { open: boolean; popClass?: string }
 
-// ใช้รูป PNG ที่ให้มา และทำให้ responsive ใหญ่พอดีกับจอ
 export default function Cat({ open, popClass = '' }: Props) {
-  const src = open ? '/cat-open.png' : '/cat-close.png'
+  const [isMouseDown, setIsMouseDown] = useState(false)
+  // ใช้ isMouseDown หรือ prop open อย่างใดอย่างหนึ่งในการตัดสินใจเปิดปาก
+  const src = isMouseDown || open ? '/cat-open.png' : '/cat-close.png'
+
   return (
-    <div className={`w-full flex justify-center ${popClass}`}>
+    <div 
+      className={`w-full flex justify-center ${popClass}`}
+      onMouseDown={() => setIsMouseDown(true)}
+      onMouseUp={() => setIsMouseDown(false)}
+      onMouseLeave={() => setIsMouseDown(false)} // กรณีเมาส์ออกนอกพื้นที่
+    >
       <img
         src={src}
         alt="popcat"
