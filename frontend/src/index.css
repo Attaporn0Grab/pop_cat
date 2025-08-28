@@ -1,0 +1,113 @@
+/* Thai:
+สไตล์หลักของ UI แบบเบาๆ:
+- จัดวาง layout, ขนาด, และ animation เล็กน้อย
+- เน้นให้อ่านง่าย และบำรุงรักษาง่าย ไม่ยัด utility เกินจำเป็น
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root { height: 100%; }
+body { @apply bg-gradient-to-b from-purple-800 via-purple-900 to-black text-white; }
+
+/* Force dark dropdown for most browsers */
+select, option {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+/* Make focus ring visible on dark */
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+}
+
+/* Ensure body uses dark color scheme so UA widgets pick dark palette where supported */
+:root { color-scheme: dark; }
+
+
+/* Animations */
+@keyframes pop-bounce {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+.pop-bounce { animation: pop-bounce 140ms ease-out; }
+
+@keyframes floatUp {
+  0% { opacity: 0; transform: translateY(0) scale(0.9); }
+  10% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-36px) scale(1.1); }
+}
+.float-up { animation: floatUp 650ms ease-out forwards; }
+
+@keyframes pulseOnce {
+  0% { text-shadow: 0 0 0 rgba(255,255,255,0); }
+  50% { text-shadow: 0 0 12px rgba(255,255,255,0.65); }
+  100% { text-shadow: 0 0 0 rgba(255,255,255,0); }
+}
+.pulse-once { animation: pulseOnce 380ms ease-in-out; }
+
+/* Make the leaderboard drawer nicer on wide screens */
+@media (min-width: 1024px) {
+  .drawer-wide { width: 34vw; max-width: 520px; }
+}
+
+/* Force dark dropdown */
+select, option { background-color: #000 !important; color: #fff !important; }
+select:focus { outline: none; box-shadow: 0 0 0 2px rgba(255,255,255,0.3); }
+:root { color-scheme: dark; }
+
+
+/* Bigger base font for readability */
+html { font-size: 18px; }
+body { font-size: 1rem; } /* 18px base */
+
+/* Larger +1 text */
+.fx-plus { font-weight: 700; }
+
+
+/* Panel slide */
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0%); }
+}
+@keyframes slideOut {
+  from { transform: translateX(0%); }
+  to { transform: translateX(100%); }
+}
+.drawer-open { animation: slideIn 220ms ease-out; }
+.drawer-close { animation: slideOut 220ms ease-in; }
+
+/* Rank animations */
+@keyframes rankUp {
+  0% { transform: translateY(0) scale(1); box-shadow: 0 0 0 rgba(255,255,255,0); }
+  30% { transform: translateY(-6px) scale(1.03); box-shadow: 0 0 24px rgba(255,255,255,0.35); }
+  100% { transform: translateY(0) scale(1); box-shadow: 0 0 0 rgba(255,255,255,0); }
+}
+@keyframes rankDown {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  60% { transform: translateY(6px) scale(0.98); opacity: .85; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+.rank-up    { animation: rankUp 600ms ease-out; }
+.rank-down  { animation: rankDown 600ms ease-in-out; }
+
+/* Subtle list item enter */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.li-enter { animation: fadeInUp 250ms ease-out; }
+
+/* Sparkle behind rank-up (using pseudo-element) */
+.rank-up::after {
+  content: "✦";
+  position: absolute;
+  right: -18px;
+  top: -2px;
+  font-size: 14px;
+  opacity: .9;
+}
+
+/* Bigger +1 as requested already via fx-plus, keep here for clarity */
+.fx-plus { text-shadow: 0 2px 0 rgba(0,0,0,.35); }

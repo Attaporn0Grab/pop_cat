@@ -1,0 +1,15 @@
+/* Thai:
+Entry point ของฝั่ง Frontend:
+- bootstrap React ด้วย ReactDOM.createRoot
+- โหลดสไตล์พื้นฐานจาก index.css
+*/
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './App'
+import './index.css'
+
+createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
