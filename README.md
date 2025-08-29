@@ -1,6 +1,6 @@
 # POPCAT4CLOUD
 
-เวอร์ชันนี้คือการรีบูทโปรเจกต์ POPCAT ให้รันบน **AWS Serverless** โดยใช้ Lambda + API Gateway + DynamoDB
+โปรเจกต์ POPCAT ให้รันบน **AWS Serverless** โดยใช้ Lambda + API Gateway + DynamoDB
 และมี frontend ที่เขียนด้วย React + Vite
 
 ## Features
